@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  demo1:
+    build:
+      context: ./demo1
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./demo1:/code
+    network_mode: "host"
+  demo2:
+    build:
+      context: ./demo2
+    command: python3 manage.py runserver 0.0.0.0:8001
+    volumes:
+      - ./demo2:/code
+    network_mode: "host"
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.0
+    container_name: keycloak
+    command: start-dev
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    network_mode: "host"
+volumes:
+  keycloak_data:
